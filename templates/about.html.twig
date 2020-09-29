@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+About
+{% endblock %}
+
+{% block content %}
+    <ul class="list-group">
+        {% for creator in creators %}
+        <li class="list-group-item">{{ creator }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

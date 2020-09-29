@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ person.firstName }} {{ person.lastName }}
+{% endblock %}
+
+{% block content %}
+	<h1>
+		{{ person.firstName }} {{ person.lastName }}
+	</h1>
+	{{ person.biography }}
+{% endblock %}

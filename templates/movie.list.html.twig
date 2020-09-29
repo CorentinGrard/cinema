@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	List movies
+{% endblock %}
+
+{% block content %}
+
+	<ul class="list-group">
+		{% for movie in movies %}
+			<li class="list-group-item">
+				<div class="card-body">
+					<h5 class="card-title">{{movie.title}}</h5>
+					<h6 class="card-subtitle mb-2 text-muted">Realisator :
+						{{movie.realisator.firstName}}
+						{{movie.realisator.lastName}}
+					</h6>
+					<p class="card-text">{{movie.description}}</p>
+					<a class="btn btn-primary" href="{{ path('movieDetail', { id: movie.id}) }}">Details</a>
+				</div>
+			</li>
+		{% endfor %}
+	</ul>
+{% endblock %}

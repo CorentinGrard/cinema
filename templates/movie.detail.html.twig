@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ movie.title }}
+{% endblock %}
+
+{% block content %}
+	<div class="card-body">
+		<h5 class="card-title">{{movie.title}}</h5>
+		<h6 class="card-subtitle mb-2 text-muted">Realisator :
+			{{movie.realisator.firstName}}
+			{{movie.realisator.lastName}}
+		</h6>
+		<p class="card-text">Description :
+			{{movie.description}}
+            <br>
+			Release date :
+			{{ movie.releaseDate | date('Y-m-d')}}
+			<br>
+            Actors : 
+			{% for actor in movie.casting %}
+				<li class="list-group-item">
+					<a href="{{ path('personDetail', { id: actor.id}) }}">{{ actor.firstName }}
+						{{ actor.lastName }}
+					</a>
+				</li>
+			{% endfor %}
+		</p>
+	</div>
+{% endblock %}
