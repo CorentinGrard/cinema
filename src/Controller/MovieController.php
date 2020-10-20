@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Movie;
+use App\Form\Type\MovieType;
 use App\Repository\MovieRepository;
-use Symfony\Component\HttpFoundation\Response;
+use App\Service\MovieGenerator;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -26,14 +29,24 @@ class MovieController extends AbstractController
     }
 
     /**
-     * @Route("/list-movies", name="movieList")
+     * @Route("/generator", name="movieGenerator")
+     */
+    public function generator(MovieGenerator $movieGenerator, EntityManagerInterface $entityManager)
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $movieGenerator->generateRandomMovie($entityManager);
+        return $this->redirectToRoute('movieList');
+    }
+
+    /**
+     * @Route("/list", name="movieList")
      */
     public function listAll(MovieRepository $movieRepository)
     {
 
         $movies = $movieRepository->findAll();
 
-        return $this->render('movie.list.html.twig', [
+        return $this->render('movie/list.html.twig', [
             'movies' => $movies,
         ]);
     }
@@ -46,34 +59,45 @@ class MovieController extends AbstractController
 
         $movies = $movieRepository->findPerCategory($id);
 
-        return $this->render('movie.list.html.twig', [
+        return $this->render('movie/list.html.twig', [
             'movies' => $movies,
         ]);
     }
 
     /**
-     * @Route("/detail/{id}", name="movieDetail")
+     * @Route("/detail/{slug}", name="movieDetail")
      */
-    public function detail(Movie $movie)
+    public function detail($slug, MovieRepository $movieRepository)
     {
-        return $this->render('movie.detail.html.twig', [
+        $movie = $movieRepository->findBySlug($slug);
+        $casting = $movie->getCasting();
+        return $this->render('movie/detail.html.twig', [
             'movie' => $movie,
+            'casting' => $casting
         ]);
     }
 
-    public function new(Request $request)
+    /**
+     * @Route("/new", name="movieNew")
+     */
+    public function new(Request $request, EntityManagerInterface $entityManager)
     {
         // creates a task object and initializes some data for this example
-        $task = new Task();
-        $task->setTask('Write a blog post');
-        $task->setDueDate(new \DateTime('tomorrow'));
+        $movie = new Movie();
+        $form = $this->createForm(MovieType::class, $movie);
 
-        $form = $this->createFormBuilder($task)
-            ->add('task', TextType::class)
-            ->add('dueDate', DateType::class)
-            ->add('save', SubmitType::class, ['label' => 'Create Task'])
-            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $movie = $form->getData();
 
-        // ...
+            $entityManager->persist($movie);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('movieList');
+        }
+
+        return $this->render('movie/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

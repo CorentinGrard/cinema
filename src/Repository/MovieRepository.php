@@ -41,6 +41,16 @@ class MovieRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findBySlug($slug){
+        return $this->createQueryBuilder('m')
+            ->join("m.realisator", "p")
+            ->addSelect("p")
+            ->andWhere("m.slug = :val")
+            ->setParameter('val', $slug)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     public function findThreeByDate()
     {
         return $this->createQueryBuilder('m')

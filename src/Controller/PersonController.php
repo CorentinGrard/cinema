@@ -17,7 +17,7 @@ class PersonController extends AbstractController
      */
     public function detail(Person $person): Response
     {
-        return $this->render('person.detail.html.twig', [
+        return $this->render('person/detail.html.twig', [
             'person' => $person,
         ]);
     }

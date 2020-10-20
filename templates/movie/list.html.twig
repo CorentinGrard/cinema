@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-
+	<a class="btn btn-primary" href="{{ path('movieNew') }}">Add a new movie</a>
 	<ul class="list-group">
 		{% for movie in movies %}
 			<li class="list-group-item">
@@ -16,7 +16,7 @@
 						{{movie.realisator.lastName}}
 					</h6>
 					<p class="card-text">{{movie.description}}</p>
-					<a class="btn btn-primary" href="{{ path('movieDetail', { id: movie.id}) }}">Details</a>
+					<a class="btn btn-primary" href="{{ path('movieDetail', { slug: movie.slug}) }}">Details</a>
 				</div>
 			</li>
 		{% endfor %}

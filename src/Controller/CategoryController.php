@@ -20,7 +20,6 @@ class CategoryController extends AbstractController
     public function countByCategory(CategoryRepository $categoryRepository): Response
     {
         $categories = $categoryRepository->getFilmNumberPerCategory();
-        dump($categories);
         return $this->render('_footer.html.twig', [
             'categories' => $categories,
         ]);

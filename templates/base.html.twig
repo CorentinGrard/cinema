@@ -36,6 +36,26 @@
 							<li class="nav-item">
 								<a class="nav-link" href="{{ path('movieList') }}">Movies List</a>
 							</li>
+							{% if is_granted('ROLE_ADMIN') %}
+								<li class="nav-item">
+									<a class="nav-link" href="{{ path('movieGenerator') }}">Generate new movie</a>
+								</li>
+							{% endif %}
+							{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+								<li class="nav-item">
+									<a class="nav-link" href="{{ path('app_login') }}">Login</a>
+								</li>
+							{% endif %}
+							{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+								<li class="nav-item">
+									<a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+								</li>
+							{% endif %}
+							{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+								<li class="nav-item">
+									<a class="nav-link" href="{{ path('profile') }}">Profile</a>
+								</li>
+							{% endif %}
 						</ul>
 					</div>
 				{% endblock %}

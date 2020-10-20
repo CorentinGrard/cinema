@@ -6,12 +6,16 @@ use App\Repository\MovieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 
 /**
  * @ORM\Entity(repositoryClass=MovieRepository::class)
  */
-class Movie
+class Movie implements SluggableInterface
 {
+    use SluggableTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -40,7 +44,7 @@ class Movie
     private $casting;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="realisatorMovies")
+     * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="realisatorMovies", cascade={"persist"})
      */
     private $realisator;
 
@@ -52,6 +56,14 @@ class Movie
     public function __construct()
     {
         $this->casting = new ArrayCollection();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSluggableFields(): array
+    {
+        return ['title'];
     }
 
     public function getId(): ?int

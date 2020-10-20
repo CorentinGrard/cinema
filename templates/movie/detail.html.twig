@@ -11,6 +11,7 @@
 			{{movie.realisator.firstName}}
 			{{movie.realisator.lastName}}
 		</h6>
+		<img src="https://picsum.photos/400/400"></img>
 		<p class="card-text">Description :
 			{{movie.description}}
             <br>
@@ -18,7 +19,7 @@
 			{{ movie.releaseDate | date('Y-m-d')}}
 			<br>
             Actors : 
-			{% for actor in movie.casting %}
+			{% for actor in casting %}
 				<li class="list-group-item">
 					<a href="{{ path('personDetail', { id: actor.id}) }}">{{ actor.firstName }}
 						{{ actor.lastName }}
